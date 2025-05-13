@@ -1,0 +1,28 @@
+# Exemplo de parte do arquivo main.yml
+name: CI/CD Livros API
+
+on:
+  push:
+    branches: [ main ] # Ou sua branch principal
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.x' # Especifique sua versão
+    - name: Check Python syntax
+      run: python -m py_compile server.py
+
+  deploy_to_render:
+    needs: build_and_test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' # Só faz deploy em push para main
+    steps:
+    - name: Trigger Render Deploy
+      run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}

@@ -1,0 +1,3 @@
+# Versão mínima do Python necessária
+# Não há dependências externas necessárias para este projeto, pois usamos apenas
+# módulos da biblioteca padrão do Python (http, json)
